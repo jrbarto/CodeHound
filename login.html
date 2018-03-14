@@ -29,11 +29,11 @@
         <form class="col s12" action="php/test.php" method="post">
           <div class="row">
             <div class="input-field col s6">
-              <input id="site_user" type="text" class="validate">
+              <input name="site_user" type="text" class="validate">
               <label for="site_user">Username</label>
             </div>
             <div class="input-field col s6">
-              <input id="site_pass" type="password" class="validate">
+              <input name="site_pass" type="password" class="validate">
               <label for="site_pass">Password</label>
             </div>
           </div>
@@ -48,35 +48,39 @@
     <div class="section">
         <h5 class="center teal-text">New Users Create an Account Here:</h5>
         <div class="row">
-          <form class="col s12" action="php/test.php">
+          <form class="col s12" action="php/add_user.php" method="post">
             <div class="row">
               <div class="input-field col s6">
-                <input id="site_user" type="text" class="validate">
-                <label for="first_name">Username</label>
+                <input name="email" type="text" class="validate">
+                <label for="email">Email</label>
               </div>
               <div class="input-field col s6">
-                <input id="site_pass" type="password" class="validate">
-                <label for="site_pass">Password</label>
+                <input name="username" type="text" class="validate">
+                <label for="username">Username</label>
+              </div>
+              <div class="input-field col s6">
+                <input name="password" type="password" class="validate">
+                <label for="password">Password</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s6">
-                <input id="username" type="text" class="validate">
-                <label for="username">Github Username</label>
+                <input name="github_user" type="text" class="validate">
+                <label for="github_user">Github Username</label>
               </div>
               <div class="input-field col s6">
-                <input id="password" type="password" class="validate">
-                <label for="password">Github Password</label>
+                <input name="github_pass" type="password" class="validate">
+                <label for="github_pass">Github Password</label>
               </div>
             </div>
             <div class="row center">
               <div class="input-field col s6 center">
-                <input id="org" type="text" class="validate center">
-                <label for="org">Github Organization</label>
+                <input id="github_org" type="text" class="validate center">
+                <label for="github_org">Github Organization</label>
               </div>
             </div>
             <div class="row center">
-                <button class="btn waves-effect waves-light" type="submit" name="action">Create
+                <button class="btn waves-effect waves-light" type="submit">Create
                   <i class="material-icons right">send</i>
                 </button>
               </div>
