@@ -23,11 +23,11 @@
     </div>
   </nav>
 
-  <div class="container login-form">
+  <div class="container">
     <div class="section">
       <h5 class="center teal-text">Existing Users Login Here:</h5>
       <div class="row">
-        <form class="col s12" action="php/login.php" method="post">
+        <form class="col s12" action="/CodeHound/php/login.php" method="post">
           <div class="row">
             <div class="input-field col s6">
               <input name="email" type="text" class="validate">
@@ -49,17 +49,11 @@
     <div class="section">
         <h5 class="center teal-text">New Users Create an Account Here:</h5>
         <div class="row">
-          <form class="col s12" action="php/add_user.php" method="post">
+          <form class="col s12" action="/CodeHound/php/add_user.php" method="post">
             <div class="row">
               <div class="input-field col s6">
                 <input name="email" type="text" class="validate">
                 <label for="email">Email</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s6">
-                <input name="username" type="text" class="validate">
-                <label for="username">Username</label>
               </div>
               <div class="input-field col s6">
                 <input name="password" type="password" class="validate">
@@ -78,7 +72,7 @@
             </div>
             <div class="row">
               <div class="input-field col s6">
-                <input id="github_org" type="text" class="validate">
+                <input name="github_org" type="text" class="validate">
                 <label for="github_org">Github Organization</label>
               </div>
             </div>

@@ -1,3 +1,7 @@
+<?php
+require 'db_config.php';
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,24 +11,24 @@
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/CodeHound/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/CodeHound/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
       <ul class="right hide-on-med-and-down">
-        <li><a href="php/logout.php">Logout</a></li>
+        <li><a href="/CodeHound/php/logout_page.php">Logout</a></li>
       </ul>
       <ul id="nav-mobile" class="side-nav">                                                                             
-        <li><a href="php/logout.php">Logout</a></li>                                                                         
+        <li><a href="/CodeHound/php/logout_page.php">Logout</a></li> 
       </ul>                                                                                                             
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 
   <div class="container">
-    <div class="section">
+    <div class="section" id="repos">
       <h5 class="center teal-text">Your Organization's Repositories:</h5>
       <div class="row">
         <div class="toast">
@@ -83,8 +87,13 @@
 
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
+  <script src="/CodeHound/js/materialize.js"></script>
+  <script src="/CodeHound/js/repos.js" 
+    github_user="<?php echo $_SESSION['github_user']?>"
+    github_pass="<?php echo $_SESSION['github_pass']?>"
+    github_org="<?php echo $_SESSION['github_org']?>"
+  >
+  </script>
 
   </body>
 </html>

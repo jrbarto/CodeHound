@@ -1,7 +1,7 @@
 <?php 
 /* Verifies the registered user by setting them to active */
 
-require 'db.php';
+require 'db_config.php';
 session_start();
 
 if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !empty($_GET['hash'])) {
@@ -13,20 +13,20 @@ if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !
 
   if ($result->num_rows == 0) { 
     $_SESSION['message'] = "This account has already been activated.";
-      header("location: error.php");
+      header("location: error_page.php");
   }
   else {
-    $_SESSION['message'] = "You have now activated your account.";
+    $_SESSION['message'] = "You have successfully activated your account.";
         
     // Set the user status to active (active = 1)
-    $mysqli->query("UPDATE users SET active='1' WHERE email='$email'") or die($mysqli->error);
+    $mysqli->query("UPDATE ch_users SET active='1' WHERE email='$email'") or die($mysqli->error);
     $_SESSION['active'] = 1;
         
-    header("location: success.php");
+    header("location: success_page.php");
   }
 }
 else {
-  $_SESSION['message'] = "Invalid parameters provided for account verification!";
-  header("location: error.php");
+  $_SESSION['message'] = "Account verification was unsuccessful.";
+  header("location: error_page.php");
 }     
 ?>

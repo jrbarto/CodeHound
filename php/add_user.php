@@ -1,8 +1,9 @@
 <?php
 /* Insert new user into the database and send confirmation email */
 
-require 'db.php';
+require 'db_config.php';
 session_start();
+
 $_SESSION['email'] = $_POST['email'];
 $_SESSION['username'] = $_POST['username'];
 $_SESSION['github_user'] = $_POST['github_user'];
@@ -24,13 +25,13 @@ $result = $mysqli->query("SELECT * FROM ch_users WHERE email='$email'") or die($
 
 // More than 0 rows means email is already in the system and we should fail 
 if ( $result->num_rows > 0 ) {
-  $_SESSION['message'] = 'User with this email already exists!';
-  header("location: error.php");
+  $_SESSION['message'] = 'User with the specified email address already exists.';
+  header("location: error_page.php");
 }
 else {
   // active is 0 by DEFAULT (no need to include it here)
-  $sql = "INSERT INTO ch_users (email, username, password, github_user, github_pass, github_org, hash, github_hash) " 
-    . "VALUES ('$email','$username','$password','$github_user', '$github_pass', '$github_org', '$hash', '$github_hash')";
+  $sql = "INSERT INTO ch_users (email, password, github_user, github_pass, github_org, hash, github_hash) " 
+    . "VALUES ('$email', '$password', '$github_user', '$github_pass', '$github_org', '$hash', '$github_hash')";
 
   // Add user to the database
   if ( $mysqli->query($sql) ){
@@ -46,11 +47,12 @@ else {
       . "http://tusk.pronow.net/CodeHound/php/verify.php?email={$email}&hash={$hash}";  
 
     mail($to, $subject, $message_body);
-    header("location: /CodeHound/index.html"); 
+    $_SESSION['message'] = "You will receive an email shortly with instructions to verify your account.";
+    header("location: verify_page.php"); 
   }
   else {
     $_SESSION['message'] = "SQL error returned: " . $mysqli->error;
-    header("location: error.php");
+    header("location: error_page.php");
   }
 
 }
