@@ -6,21 +6,23 @@ session_start();
 <html>
 <head>
   <title>Success</title>
-  <?php include 'css/materialize.css'; ?>
+    <!-- CSS  -->                                                                                                       
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">                              
+    <link href="/CodeHound/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>            
+    <link href="/CodeHound/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-<div class="form">
-    <h1><?= 'Success'; ?></h1>
-    <p>
-    <?php 
-    if( isset($_SESSION['message']) AND !empty($_SESSION['message']) ):
-        echo $_SESSION['message'];    
-    else:
-        header( "location: /CodeHound/index.php" );
-    endif;
-    ?>
-    </p>
-    <a href="/CodeHound/index.html"><button class="button button-block"/>Home</button></a>
-</div>
+  <h1 class="header teal-text"><?= 'Success'; ?></h1>
+  <h5 class="strong">
+  <?php 
+  if( isset($_SESSION['message']) AND !empty($_SESSION['message']) ):
+    echo $_SESSION['message'];    
+  else:
+    header( "location: /CodeHound/index.php" );
+  endif;
+  ?>
+  </h5>
+  <br><br>
+  <a href="/CodeHound/index.html"><button class="btn-large waves-effect waves-light teal lighten-1"/>Home</button></a>
 </body>
 </html>

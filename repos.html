@@ -14,83 +14,43 @@
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
       <ul class="right hide-on-med-and-down">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="php/logout.php">Logout</a></li>
       </ul>
       <ul id="nav-mobile" class="side-nav">                                                                             
-        <li><a href="index.html">Home</a></li>                                                                         
+        <li><a href="php/logout.php">Logout</a></li>                                                                         
       </ul>                                                                                                             
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 
-  <div class="container login-form">
+  <div class="container">
     <div class="section">
-      <h5 class="center teal-text">Existing Users Login Here:</h5>
+      <h5 class="center teal-text">Your Organization's Repositories:</h5>
       <div class="row">
-        <form class="col s12" action="php/login.php" method="post">
-          <div class="row">
-            <div class="input-field col s6">
-              <input name="email" type="text" class="validate">
-              <label for="email">Email</label>
-            </div>
-            <div class="input-field col s6">
-              <input name="password" type="password" class="validate">
-              <label for="password">Password</label>
-            </div>
-          </div>
-          <div class="row center">
-            <button class="btn waves-effect waves-light" type="submit">Login
-              <i class="material-icons right">send</i>
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="section">
-        <h5 class="center teal-text">New Users Create an Account Here:</h5>
-        <div class="row">
-          <form class="col s12" action="php/add_user.php" method="post">
-            <div class="row">
-              <div class="input-field col s6">
-                <input name="email" type="text" class="validate">
-                <label for="email">Email</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s6">
-                <input name="username" type="text" class="validate">
-                <label for="username">Username</label>
-              </div>
-              <div class="input-field col s6">
-                <input name="password" type="password" class="validate">
-                <label for="password">Password</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s6">
-                <input name="github_user" type="text" class="validate">
-                <label for="github_user">Github Username</label>
-              </div>
-              <div class="input-field col s6">
-                <input name="github_pass" type="password" class="validate">
-                <label for="github_pass">Github Password</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s6">
-                <input id="github_org" type="text" class="validate">
-                <label for="github_org">Github Organization</label>
-              </div>
-            </div>
-            <div class="row center">
-                <button class="btn waves-effect waves-light" type="submit">Create
-                  <i class="material-icons right">send</i>
-                </button>
-              </div>
-          </form>
+        <div class="toast">
+          <span>Repository Name 1</span>
+          <button class="btn waves-effect waves-light">Full Review
+            <i class="material-icons right">send</i>
+          </button>
+          <button class="btn waves-effect waves-light">Monitor Repo                                                    
+            <i class="material-icons right">send</i>                                                                  
+          </button>
         </div>
       </div>
+      <div class="row">                                                                                                 
+        <div class="toast">                                                                                               
+          <span>Repository Name 2</span>                                                                                      
+          <button class="btn waves-effect waves-light">Full Review                                                      
+            <i class="material-icons right">send</i>                                                                    
+          </button>                                                                                                     
+          <button class="btn waves-effect waves-light">Monitor Repo                                                     
+            <i class="material-icons right">send</i>                                                                    
+          </button>                                                                                                     
+        </div>                                                                                                          
+      </div>
+    </div>
   </div>
+  <br><br>
 
   <footer class="page-footer teal">
     <div class="container">                                                                                             

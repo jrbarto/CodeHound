@@ -1,7 +1,5 @@
 <?php
-/* Registration process, inserts user info into the database 
-   and sends account confirmation email message
- */
+/* Insert new user into the database and send confirmation email */
 
 require 'db.php';
 session_start();
@@ -26,48 +24,34 @@ $result = $mysqli->query("SELECT * FROM ch_users WHERE email='$email'") or die($
 
 // More than 0 rows means email is already in the system and we should fail 
 if ( $result->num_rows > 0 ) {
-    
-    $_SESSION['message'] = 'User with this email already exists!';
-    header("location: error.php");
-    
+  $_SESSION['message'] = 'User with this email already exists!';
+  header("location: error.php");
 }
 else {
-    echo 'I MADE IT HERE';
-    // active is 0 by DEFAULT (no need to include it here)
-    $sql = "INSERT INTO ch_users (email, username, password, github_user, github_pass, github_org, hash, github_hash) " 
-            . "VALUES ('$email','$username','$password','$github_user', '$github_pass', '$github_org', '$hash', '$github_hash')";
+  // active is 0 by DEFAULT (no need to include it here)
+  $sql = "INSERT INTO ch_users (email, username, password, github_user, github_pass, github_org, hash, github_hash) " 
+    . "VALUES ('$email','$username','$password','$github_user', '$github_pass', '$github_org', '$hash', '$github_hash')";
 
-    // Add user to the database
-    if ( $mysqli->query($sql) ){
+  // Add user to the database
+  if ( $mysqli->query($sql) ){
+    $_SESSION['active'] = 0; //0 until user activates their account with verify.php
+    $_SESSION['logged_in'] = true; // So we know the user has logged in
+    $_SESSION['message'] = "Confirmation link has been sent to $email, please verify
+      your account by clicking on the link in the message!";
 
-        $_SESSION['active'] = 0; //0 until user activates their account with verify.php
-        $_SESSION['logged_in'] = true; // So we know the user has logged in
-        $_SESSION['message'] =
-                
-                 "Confirmation link has been sent to $email, please verify
-                 your account by clicking on the link in the message!";
+    // Send confirmation email
+    $to = $email;
+    $subject = "Verify Your Account on CodeHound";
+    $message_body = "Hi {$email},\nThank you for signing up for CodeHound!\nClick the link below to activate your account:\n"
+      . "http://tusk.pronow.net/CodeHound/php/verify.php?email={$email}&hash={$hash}";  
 
-        // Send registration confirmation link (verify.php)
-        $to      = $email;
-        $subject = 'Account Verification (CodeHound)';
-        $message_body = '
-        Hello '.$first_name.',
-
-        Thank you for signing up!
-
-        Please click this link to activate your account:
-
-        http://tusk.pronow.net/CodeHound/php/verify.php?email='.$email.'&hash='.$hash;  
-
-        mail( $to, $subject, $message_body );
-
-        header("location: /CodeHound/index.html"); 
-
-    }
-
-    else {
-        $_SESSION['message'] = $mysqli->error;
-        header("location: error.php");
-    }
+    mail($to, $subject, $message_body);
+    header("location: /CodeHound/index.html"); 
+  }
+  else {
+    $_SESSION['message'] = "SQL error returned: " . $mysqli->error;
+    header("location: error.php");
+  }
 
 }
+?>

@@ -1,26 +1,27 @@
 <?php
-/* Displays all error messages */
-session_start();
+  session_start();
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Error</title>
-  <?php include 'css/materialize.css'; ?>
-</head>
-<body>
-<div class="form">
-    <h1>Error</h1>
-    <p>
-    <?php 
+  <head>
+    <title>CodeHound Error</title>
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="/CodeHound/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="/CodeHound/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  </head>
+  <body>
+    <h1 class="header teal-text">Error</h1>
+    <h5>
+    <?php
     if(isset($_SESSION['message']) AND !empty($_SESSION['message'])): 
-        echo $_SESSION['message'];    
+      echo $_SESSION['message'];    
     else:
-        header("location: /CodeHound/index.html");
+      header("location: /CodeHound/index.html");
     endif;
     ?>
-    </p>     
-    <a href="/CodeHound/index.html"><button class="button button-block"/>Home</button></a>
-</div>
-</body>
+    </h5>
+    <br><br>
+    <a href="/CodeHound/index.html"><button class="btn-large waves-effect waves-light teal lighten-1"/>Home</button></a>
+  </body>
 </html>
