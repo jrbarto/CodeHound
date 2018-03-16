@@ -1,59 +1,61 @@
 <?php
 /* Insert new user into the database and send confirmation email */
 
-require 'db_config.php';
-session_start();
+require 'db_config.php'; // Start session and assign DB config
 
+/* Variables to use later in the session */
 $_SESSION['email'] = $_POST['email'];
-$_SESSION['username'] = $_POST['username'];
-$_SESSION['github_user'] = $_POST['github_user'];
-$_SESSION['github_pass'] = $_POST['github_pass'];
-$_SESSION['github_org'] = $_POST['github_org'];
+// Base 64 encoded username:password Github authentication credentials
+$_SESSION['github_auth'] = base64_encode($_POST['github_user'].":".$_POST['github_pass']);
 
 // Escape SQL keywords
 $email = $mysqli->escape_string($_POST['email']);
 $username = $mysqli->escape_string($_POST['username']);
 $password = $mysqli->escape_string(password_hash($_POST['password'], PASSWORD_BCRYPT));
-$github_user = $mysqli->escape_string($_POST['github_user']);
-$github_pass = $mysqli->escape_string(password_hash($POST['github_pass'], PASSWORD_BCRYPT));
-$hash = $mysqli->escape_string(md5(rand(0,1000)));
-$github_hash = $mysqli->escape_string(md5(rand(0,1000)));
-$github_org = $mysqli->escape_string($_POST['github_org']);
-      
+$github_auth = $mysqli->escape_string($_SESSION['github_auth']);
 // Check if email is already in system
-$result = $mysqli->query("SELECT * FROM ch_users WHERE email='$email'") or die($mysqli->error());
+$sql = "SELECT * FROM ch_users WHERE email='$email'";
+$result = $mysqli->query($sql) or die($mysqli->error);
 
 // More than 0 rows means email is already in the system and we should fail 
-if ( $result->num_rows > 0 ) {
-  $_SESSION['message'] = 'User with the specified email address already exists.';
-  header("location: error_page.php");
+if ($result->num_rows > 0) {
+  $_SESSION['error'] = 'User with the specified email address already exists.';
+  header("location: /CodeHound/php/error_page.php");
 }
 else {
   // active is 0 by DEFAULT (no need to include it here)
-  $sql = "INSERT INTO ch_users (email, password, github_user, github_pass, github_org, hash, github_hash) " 
-    . "VALUES ('$email', '$password', '$github_user', '$github_pass', '$github_org', '$hash', '$github_hash')";
+  $sql = "INSERT INTO ch_users (email, password, github_auth) "
+    . "VALUES ('$email', '$password', '$github_auth')";
 
   // Add user to the database
-  if ( $mysqli->query($sql) ){
+  if ($mysqli->query($sql)) {
     $_SESSION['active'] = 0; //0 until user activates their account with verify.php
     $_SESSION['logged_in'] = true; // So we know the user has logged in
-    $_SESSION['message'] = "Confirmation link has been sent to $email, please verify
-      your account by clicking on the link in the message!";
+    $sql = "SELECT id FROM ch_users WHERE email='$email'";
+    $result = $mysqli->query($sql) or die($mysqli->error);
+    $user_id = $result->fetch_assoc()['id'];
 
+    foreach ($default_scripts as $script) {
+      $path = $script[0];
+      $comment = $script[1];
+      $sql = "INSERT INTO ch_scripts (user_id, script_path, comment) "
+        . "VALUES ('$user_id', '$path', '$comment')";
+      $mysqli->query($sql) or die($mysqli->error);
+    }
     // Send confirmation email
     $to = $email;
     $subject = "Verify Your Account on CodeHound";
-    $message_body = "Hi {$email},\nThank you for signing up for CodeHound!\nClick the link below to activate your account:\n"
-      . "http://tusk.pronow.net/CodeHound/php/verify.php?email={$email}&hash={$hash}";  
+    $email_body = "Hi {$email},\nThank you for signing up for CodeHound!\nClick the link below to activate your account:\n"
+      . "http://tusk.pronow.net/CodeHound/php/verify.php?email={$email}";  
 
-    mail($to, $subject, $message_body);
-    $_SESSION['message'] = "You will receive an email shortly with instructions to verify your account.";
-    header("location: verify_page.php"); 
-  }
-  else {
-    $_SESSION['message'] = "SQL error returned: " . $mysqli->error;
-    header("location: error_page.php");
+    mail($to, $subject, $email_body);
+    header("location: /CodeHound/php/verify_page.php"); 
   }
 
+}
+
+if ($mysqli->errno) {
+  $_SESSION['error'] = "SQL error returned: " . $mysqli->error;
+  header("location: /CodeHound/php/error_page.php");
 }
 ?>

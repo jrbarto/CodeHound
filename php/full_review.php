@@ -1,6 +1,13 @@
 <?php
-/* Displays all successful messages */
 session_start();
+$user_id = $_SESSION['id'];
+$sql = "SELECT * FROM ch_scripts WHERE user_id='$user_id'";
+$result = $mysqli->query(sql) or die($mysqli->error);
+while ($row = $result->fetch_assoc()) {
+  $script_path = $result['script_path'];
+  $comment = $rsult['comment'];
+  $output = shell_exec("java -jar " . $ch_jar ." ". $script_path ." ". $_SESSION);
+}
 ?>
 <!DOCTYPE html>
 <html>

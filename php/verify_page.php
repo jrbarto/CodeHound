@@ -14,13 +14,7 @@
     <div class="collection center teal darken-4">
       <h1 class="header teal-text">Verify Your Account</h1>
       <h5 class="white-text">
-      <?php
-      if(isset($_SESSION['message']) AND !empty($_SESSION['message'])): 
-        echo $_SESSION['message'];    
-      else:
-        header("location: /CodeHound/index.html");
-      endif;
-      ?>
+        You will receive an email at <?php echo $_SESSION['email']?> shortly with instructions to verify your account.
       </h5>
       <br><br>
       <a href="/CodeHound/index.html">

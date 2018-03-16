@@ -1,23 +1,19 @@
 <?php 
 /* Verifies the registered user by setting them to active */
 
-require 'db_config.php';
-session_start();
+require 'db_config.php'; // Start session and assign DB config
 
-if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !empty($_GET['hash'])) {
+if(isset($_GET['email']) && !empty($_GET['email'])) {
   $email = $mysqli->escape_string($_GET['email']); 
-  $hash = $mysqli->escape_string($_GET['hash']); 
     
   // Select unactivated users matching the email and hash
-  $result = $mysqli->query("SELECT * FROM ch_users WHERE email='$email' AND hash='$hash' AND active='0'");
+  $result = $mysqli->query("SELECT * FROM ch_users WHERE email='$email' AND active='0'");
 
   if ($result->num_rows == 0) { 
-    $_SESSION['message'] = "This account has already been activated.";
-      header("location: error_page.php");
+    $_SESSION['error'] = "This account has already been activated.";
+    header("location: /CodeHound/php/error_page.php");
   }
   else {
-    $_SESSION['message'] = "You have successfully activated your account.";
-        
     // Set the user status to active (active = 1)
     $mysqli->query("UPDATE ch_users SET active='1' WHERE email='$email'") or die($mysqli->error);
     $_SESSION['active'] = 1;
@@ -26,7 +22,7 @@ if(isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !
   }
 }
 else {
-  $_SESSION['message'] = "Account verification was unsuccessful.";
+  $_SESSION['error'] = "Account verification was unsuccessful.";
   header("location: error_page.php");
 }     
 ?>

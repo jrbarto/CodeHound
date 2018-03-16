@@ -15,8 +15,8 @@ session_start();
       <h1 class="header teal-text">Error</h1>
       <h5 class="white-text">
       <?php
-      if(isset($_SESSION['message']) AND !empty($_SESSION['message'])): 
-        echo $_SESSION['message'];    
+      if(isset($_SESSION['error']) AND !empty($_SESSION['error'])): 
+        echo $_SESSION['error'];    
       else:
         header("location: /CodeHound/index.html");
       endif;

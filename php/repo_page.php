@@ -1,6 +1,5 @@
 <?php
-require 'db_config.php';
-session_start();
+require 'db_config.php'; // Start session and assign DB config
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,11 +32,16 @@ session_start();
       <div class="row">
         <div class="toast">
           <span>Repository Name 1</span>
+          <div class="switch">
+            <label class="white-text">
+              Off
+              <input type="checkbox">
+              <span class="lever"></span>
+              Active Monitoring
+            </label>
+          </div>
           <button class="btn waves-effect waves-light">Full Review
             <i class="material-icons right">send</i>
-          </button>
-          <button class="btn waves-effect waves-light">Monitor Repo                                                    
-            <i class="material-icons right">send</i>                                                                  
           </button>
         </div>
       </div>
@@ -88,11 +92,7 @@ session_start();
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="/CodeHound/js/materialize.js"></script>
-  <script src="/CodeHound/js/repos.js" 
-    github_user="<?php echo $_SESSION['github_user']?>"
-    github_pass="<?php echo $_SESSION['github_pass']?>"
-    github_org="<?php echo $_SESSION['github_org']?>"
-  >
+  <script src="/CodeHound/js/repos.js" github_auth="<?php echo $_SESSION['github_auth']?>">
   </script>
 
   </body>
