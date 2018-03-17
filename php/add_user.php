@@ -2,6 +2,7 @@
 /* Insert new user into the database and send confirmation email */
 
 require 'db_config.php'; // Start session and assign DB config
+require 'app_config.php'; // CodeHound specific application settings
 
 /* Variables to use later in the session */
 $_SESSION['email'] = $_POST['email'];

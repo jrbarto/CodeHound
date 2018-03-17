@@ -45,6 +45,13 @@ require 'db_config.php'; // Start session and assign DB config
           </button>
         </div>
       </div>
+      <div class="card-panel teal">                                                                                     
+        <div class="card teal">                                                                                         
+          <div class="card-content center">                                                                                
+            <span class="white-text card-title">Executing a full review on this repository... Please be patient, results will be displayed momentarily.</span>
+          </div>                                                                                                           
+        </div>                                                                                                             
+      </div>
       <div class="row">                                                                                                 
         <div class="toast">                                                                                               
           <span>Repository Name 2</span>                                                                                      
@@ -55,6 +62,13 @@ require 'db_config.php'; // Start session and assign DB config
             <i class="material-icons right">send</i>                                                                    
           </button>                                                                                                     
         </div>                                                                                                          
+      </div>
+      <div class="card-panel teal">
+        <div class="card teal">
+          <div class="card-content center">
+            <span class="white-text card-title">Executing a full review on this repository... Please be patient, results will be displayed momentarily.</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -68,6 +68,11 @@ orgsRequest.onreadystatechange = function() {
             icon.setAttribute("class", "material-icons right");
             icon.innerHTML = "send";
             button.appendChild(icon);
+            button.repoPath = repo.full_name; // Store repo path for use on button event
+            button.row = row;
+            button.addEventListener("click", function(e) {
+              runFullReview(this.repoPath, this.row);
+            });
           }
         }
       }
@@ -86,6 +91,31 @@ function httpGet(url, request) {
   request.send();
 }
 
-function runFullReview(fullRepo) {
-  
+function runFullReview(fullRepo, row) {
+  var cardPanel = document.createElement("div");
+  cardPanel.setAttribute("class", "card-panel teal");
+  row.insertAdjacentElement("afterend", cardPanel);
+  var card = document.createElement("div");
+  card.setAttribute("class", "card teal");
+  cardPanel.appendChild(card);
+  var cardContent = document.createElement("div");
+  cardContent.setAttribute("class", "card-content center");
+  card.appendChild(cardContent);
+  var cardTitle = document.createElement("span");
+  cardTitle.setAttribute("class", "white-text card-title");
+  cardTitle.innerHTML = "Executing a full review of this repository... "
+    + "Please be patient, results will be displayed momentarily.";
+  cardContent.appendChild(cardTitle);
+   
+  window.location.assign("/CodeHound/php/full_review.php?repo_path=" + fullRepo);
+  /*
+  $.ajax({
+    url: '/CodeHound/php/full_review.php',
+    type: 'POST',
+    data: {repo: fullRepo},
+    success: function(data) {
+      console.log(data);
+    }
+  });
+  */
 }
