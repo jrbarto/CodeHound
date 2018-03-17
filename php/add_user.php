@@ -14,6 +14,7 @@ $email = $mysqli->escape_string($_POST['email']);
 $username = $mysqli->escape_string($_POST['username']);
 $password = $mysqli->escape_string(password_hash($_POST['password'], PASSWORD_BCRYPT));
 $github_auth = $mysqli->escape_string($_SESSION['github_auth']);
+$github_user = $mysqli->escape_string($_POST['github_user']); // Stored for webhook account search
 // Check if email is already in system
 $sql = "SELECT * FROM ch_users WHERE email='$email'";
 $result = $mysqli->query($sql) or die($mysqli->error);
@@ -25,8 +26,8 @@ if ($result->num_rows > 0) {
 }
 else {
   // active is 0 by DEFAULT (no need to include it here)
-  $sql = "INSERT INTO ch_users (email, password, github_auth) "
-    . "VALUES ('$email', '$password', '$github_auth')";
+  $sql = "INSERT INTO ch_users (email, password, github_user, github_auth) "
+    . "VALUES ('$email', '$password', '$github_user', '$github_auth')";
 
   // Add user to the database
   if ($mysqli->query($sql)) {

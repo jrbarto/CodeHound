@@ -1,4 +1,5 @@
 const GH_API = "https://api.github.com";
+const HOOK_NAME = "web";
 
 var github_auth = document.currentScript.getAttribute('github_auth');
 
@@ -54,10 +55,18 @@ orgsRequest.onreadystatechange = function() {
             var checkbox = document.createElement("input");
             checkbox.setAttribute("type", "checkbox");
             label.appendChild(checkbox);
+            /* Store variables for use on checkbox button event */
+            checkbox.hooksUrl = repo.hooks_url;
+            checkbox.row = row;
+            checkbox.addEventListener("click", function(e) {
+              installWebhook(this.hooksUrl, this, this.row);
+            });
+
             var lever = document.createElement("span");
             lever.setAttribute("class", "lever");
             label.appendChild(lever);
             label.appendChild(onLabel);
+            isHookInstalled(repo.hooks_url, checkbox);
 
             /* Create button to launch a full repo review */
             var button = document.createElement("button");
@@ -68,10 +77,12 @@ orgsRequest.onreadystatechange = function() {
             icon.setAttribute("class", "material-icons right");
             icon.innerHTML = "send";
             button.appendChild(icon);
-            button.repoPath = repo.full_name; // Store repo path for use on button event
+            /* Store variables for use on button event */
+            button.repoPath = repo.full_name;
+            button.repoUrl = repo.html_url;
             button.row = row;
             button.addEventListener("click", function(e) {
-              runFullReview(this.repoPath, this.row);
+              runFullReview(this.repoPath, this.repoUrl, this.row);
             });
           }
         }
@@ -91,31 +102,129 @@ function httpGet(url, request) {
   request.send();
 }
 
-function runFullReview(fullRepo, row) {
-  var cardPanel = document.createElement("div");
-  cardPanel.setAttribute("class", "card-panel teal");
-  row.insertAdjacentElement("afterend", cardPanel);
-  var card = document.createElement("div");
-  card.setAttribute("class", "card teal");
-  cardPanel.appendChild(card);
-  var cardContent = document.createElement("div");
-  cardContent.setAttribute("class", "card-content center");
-  card.appendChild(cardContent);
-  var cardTitle = document.createElement("span");
-  cardTitle.setAttribute("class", "white-text card-title");
-  cardTitle.innerHTML = "Executing a full review of this repository... "
+function httpPost(url, request, body) {
+  request.open("POST", url);
+  request.setRequestHeader("Authorization", "Basic " + github_auth);
+  request.setRequestHeader("Accept", "application/json");
+  request.setRequestHeader("Content-Type", "application/json");
+  request.send(body);  
+}
+
+function httpDelete(url, request) {
+  request.open("DELETE", url);
+  request.setRequestHeader("Authorization", "Basic " + github_auth);                                                    
+  request.setRequestHeader("Accept", "application/json");                                                               
+  request.send(); 
+}
+
+function runFullReview(fullRepo, repoUrl, row) {
+  var cardText = "Executing a full review of this repository... "
     + "Please be patient, results will be displayed momentarily.";
+  var cardPanel = document.createElement("div");                                                                        
+  cardPanel.setAttribute("class", "card-panel teal");                                                                   
+  row.insertAdjacentElement("afterend", cardPanel);                                                                     
+  var card = document.createElement("div");                                                                             
+  card.setAttribute("class", "card teal");                                                                              
+  cardPanel.appendChild(card);                                                                                          
+  var cardContent = document.createElement("div");                                                                      
+  cardContent.setAttribute("class", "card-content center");                                                             
+  card.appendChild(cardContent);                                                                                        
+  var cardTitle = document.createElement("span");                                                                       
+  cardTitle.setAttribute("class", "white-text card-title");                                                             
+  cardTitle.innerHTML = cardText;
   cardContent.appendChild(cardTitle);
    
-  window.location.assign("/CodeHound/php/full_review.php?repo_path=" + fullRepo);
-  /*
-  $.ajax({
-    url: '/CodeHound/php/full_review.php',
-    type: 'POST',
-    data: {repo: fullRepo},
-    success: function(data) {
-      console.log(data);
+  window.location.assign("/CodeHound/php/full_review.php?repo_path=" + fullRepo 
+    + "&repo_url=" + repoUrl);
+}
+
+function isHookInstalled(hooksUrl, checkbox) {
+  var getHook = new XMLHttpRequest();
+  var installed = false;
+  getHook.onreadystatechange = function() {
+    if (getHook.readyState == XMLHttpRequest.DONE) {
+      var hookResponse = getHook.response;
+      var hooks = JSON.parse(hookResponse);
+      for (i = 0; i < hooks.length; i++) { 
+        var hook = hooks[i];
+        if (hook.name == HOOK_NAME) {
+          checkbox.checked = true;
+          installed = true;
+        }
+      }
     }
-  });
-  */
+  }
+  httpGet(hooksUrl + "?" + Math.random(), getHook);
+}
+
+function installWebhook(hooksUrl, checkbox, row) {
+  var getHook = new XMLHttpRequest();
+  var cardText = "Searching for existing webhooks...";
+  var cardPanel = document.createElement("div");                                                                        
+  cardPanel.setAttribute("class", "card-panel teal");                                                                   
+  row.insertAdjacentElement("afterend", cardPanel);                                                                     
+  var card = document.createElement("div");                                                                             
+  card.setAttribute("class", "card teal");                                                                              
+  cardPanel.appendChild(card);                                                                                          
+  var cardContent = document.createElement("div");                                                                      
+  cardContent.setAttribute("class", "card-content center");                                                             
+  card.appendChild(cardContent);                                                                                        
+  var cardTitle = document.createElement("span");                                                                       
+  cardTitle.setAttribute("class", "white-text card-title");                                                             
+  cardTitle.innerHTML = cardText;                                                                                       
+  cardContent.appendChild(cardTitle);
+
+  getHook.onreadystatechange = function() {
+    if (getHook.readyState == XMLHttpRequest.DONE) {
+      var hookResponse = getHook.response;
+      var hooks = JSON.parse(hookResponse);
+      var cardText = "";
+      var removed = false;
+
+      for (i = 0; i < hooks.length; i++) {
+        var hook = hooks[i];
+        if (hook.name == HOOK_NAME) {
+          cardTitle.innerHTML = "Removing the Code Hound webhook...";
+          var removeHook = new XMLHttpRequest();
+          removeHook.onreadystatechange = function() {
+            if (removeHook.readyState == XMLHttpRequest.DONE) {
+              var removeResponse = removeHook.response;
+              if (removeResponse.status == 204) {
+                this.checkbox.checked = false;
+              }
+              cardPanel.remove();
+            }
+          }
+
+          httpDelete(hooksUrl + "/" + hook.id, removeHook); 
+          removed = true;
+        }
+      }
+
+      if (!removed) {
+        cardTitle.innerHTML = "Installing the Code Hound webhook...";
+        var body = '{"name":"web","active":true,"events":["pull_request"],"config":'
+          + '{"url":"http://tusk.pronow.net/CodeHound/php/pull_review.php","content_type":"json"}}';
+  
+        var createHook = new XMLHttpRequest();
+        createHook.onreadystatechange = function() {
+          if (getHook.readyState == XMLHttpRequest.DONE) {
+            var createResponse = createHook.response;
+            // Uncheck button upon successful webhook installation
+            if (createResponse.states == 201) {
+              checkbox.checked = true;
+            }
+
+            
+            cardPanel.remove();
+          }
+        }
+
+        httpPost(hooksUrl, createHook, body);
+      }
+    }
+  }
+
+  var noCacheUrl = hooksUrl + "?" + Math.random();
+  httpGet(noCacheUrl, getHook);
 }
