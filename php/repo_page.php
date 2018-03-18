@@ -6,7 +6,7 @@ require 'db_config.php'; // Start session and assign DB config
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Code Hound Login</title>
+  <title>Code Hound Repos</title>
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -26,9 +26,9 @@ require 'db_config.php'; // Start session and assign DB config
     </div>
   </nav>
 
-  <div class="container">
-    <div class="section" id="repos">
-      <h5 class="center teal-text">Your Organization's Repositories:</h5>
+  <div class="container" id="repos">
+    <div class="section">
+      <h5 class="center teal-text">Loading Organizations...</h5>
       <div class="row">
         <div class="toast">
           <span>Repository Name 1</span>
@@ -48,27 +48,11 @@ require 'db_config.php'; // Start session and assign DB config
       <div class="card-panel teal">                                                                                     
         <div class="card teal">                                                                                         
           <div class="card-content center">                                                                                
-            <span class="white-text card-title">Executing a full review on this repository... Please be patient, results will be displayed momentarily.</span>
+            <span class="white-text card-title">
+              Please be patient while we query for your organizations and repositories...
+            </span>
           </div>                                                                                                           
         </div>                                                                                                             
-      </div>
-      <div class="row">                                                                                                 
-        <div class="toast">                                                                                               
-          <span>Repository Name 2</span>                                                                                      
-          <button class="btn waves-effect waves-light">Full Review                                                      
-            <i class="material-icons right">send</i>                                                                    
-          </button>                                                                                                     
-          <button class="btn waves-effect waves-light">Monitor Repo                                                     
-            <i class="material-icons right">send</i>                                                                    
-          </button>                                                                                                     
-        </div>                                                                                                          
-      </div>
-      <div class="card-panel teal">
-        <div class="card teal">
-          <div class="card-content center">
-            <span class="white-text card-title">Executing a full review on this repository... Please be patient, results will be displayed momentarily.</span>
-          </div>
-        </div>
       </div>
     </div>
   </div>

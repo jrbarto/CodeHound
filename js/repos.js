@@ -4,7 +4,8 @@ const HOOK_NAME = "web";
 var github_auth = document.currentScript.getAttribute('github_auth');
 
 var reposContainer = document.getElementById("repos");
-reposContainer.innerHTML = "";
+var reposSection = document.createElement("div");
+reposSection.setAttribute("class", "section");
 
 var orgsRequest = new XMLHttpRequest();
 
@@ -21,7 +22,7 @@ orgsRequest.onreadystatechange = function() {
       var orgHeader = document.createElement("h5");
       orgHeader.setAttribute("class", "center teal-text");
       orgHeader.innerHTML = org.login + " Repositories:";
-      reposContainer.appendChild(orgHeader);
+      reposSection.appendChild(orgHeader);
       
       var repoRequest = new XMLHttpRequest();
       
@@ -90,6 +91,9 @@ orgsRequest.onreadystatechange = function() {
 
       httpGet(org.repos_url, repoRequest);
     }
+
+    reposContainer.innerHTML = "";
+    reposContainer.appendChild(reposSection);
   }
 }
 
