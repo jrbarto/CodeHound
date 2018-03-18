@@ -22,10 +22,13 @@ echo "USER ID IS " .$user_id;
 $sql = "SELECT * FROM ch_scripts WHERE user_id='$user_id'";
 $result = $mysqli->query($sql) or die($mysqli->error);
 while ($row = $result->fetch_assoc()) {
-  $script_path = $row['script_path'];
-  $comment = $row['comment'];
-  /* Process must not wait for output as to hold up the webhook or it may timeout */
-  $command = "java -jar " . $ch_jar ." ". $script_path ." ". $repo_path 
-    ." ". $github_auth ." ". "'$comment'" ." false > /dev/null 2>/dev/null &";
-  shell_exec($command);
+  $active = $row['active'];
+  if ($active) {
+    $script_path = $row['script_path'];
+    $comment = $row['comment'];
+    /* Process must not wait for output as to hold up the webhook or it may timeout */
+    $command = "java -jar " . $ch_jar ." ". $script_path ." ". $repo_path 
+      ." ". $github_auth ." ". "'$comment'" ." false > /dev/null 2>/dev/null &";
+    shell_exec($command);
+  }
 }

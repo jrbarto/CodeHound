@@ -9,11 +9,14 @@ $sql = "SELECT * FROM ch_scripts WHERE user_id=$user_id";
 $result = $mysqli->query($sql) or die($mysqli->error);
 
 while ($row = $result->fetch_assoc()) {
-  $script_path = $row['script_path'];
-  $comment = $row['comment'];
-  $command = "java -jar " . $ch_jar ." ". $script_path ." ". $repo_path 
-    ." ". $_SESSION['github_auth'] ." ". "'$comment'" ." true";
-  $output .= shell_exec($command);
+  $active = $row['active'];
+  if ($active) {
+    $script_path = $row['script_path'];
+    $comment = $row['comment'];
+    $command = "java -jar " . $ch_jar ." ". $script_path ." ". $repo_path 
+      ." ". $_SESSION['github_auth'] ." ". "'$comment'" ." true";
+    $output .= shell_exec($command);
+  }
 }
 ?>
 <!DOCTYPE html>                                                                                                         

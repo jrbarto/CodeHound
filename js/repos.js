@@ -15,6 +15,16 @@ orgsRequest.onreadystatechange = function() {
   if (orgsRequest.readyState == XMLHttpRequest.DONE) {
     var response = orgsRequest.response;
     var orgs = JSON.parse(response);
+
+    
+    if (orgs.length == 0) {
+      var row = document.createElement("div");
+      row.setAttribute("class", "row");
+      var header = document.createElement("h5");
+      header.setAttribute("class", "center teal-text");
+      header.innerHTML = "This User Doesn't Belong To Any Organizations.";
+      reposSection.appendChild(header);
+    }
     
     for (i = 0; i < orgs.length; i++) {
       var org = orgs[i];
