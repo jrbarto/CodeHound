@@ -27,7 +27,7 @@ while ($row = $result->fetch_assoc()) {
 </head>                                                                                                                 
 <body class="teal">                                                                                                     
   <div class="collection center teal darken-4">                                                                         
-    <h1 class="header teal-text"><?= 'Success'; ?></h1>                                                                 
+    <h1 class="header teal-text">Code Review Complete</h1>                                                                 
     <h5 class="white-text">                                                                                             
       <?php echo nl2br($output) ?>                                                           
     </h5>                                                                                                               

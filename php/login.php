@@ -10,7 +10,7 @@ $result = $mysqli->query("SELECT * FROM ch_users WHERE email='$email'");
 // Fail if user doesn't exist
 if ( $result->num_rows == 0 ) {
   $_SESSION['error'] = "No account matching the specified email address exists.";
-  header("location: error_page.php");
+  header("location: /CodeHound/php/error_page.php");
 }
 else {
   // Fetch result row as array
@@ -30,7 +30,7 @@ else {
   }
   else {
     $_SESSION['error'] = "The password entered is incorrect.";
-    header("location: error_page.php");
+    header("location: /CodeHound/php/error_page.php");
   }
 }
 ?>

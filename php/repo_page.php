@@ -22,6 +22,12 @@ require 'db_config.php'; // Start session and assign DB config
       <ul id="nav-mobile" class="side-nav">                                                                             
         <li><a href="/CodeHound/php/logout_page.php">Logout</a></li> 
       </ul>                                                                                                             
+      <ul class="right hide-on-med-and-down">                                                                           
+        <li><a href="/CodeHound/php/upload_page.php">Upload</a></li>                                                    
+      </ul>                                                                                                             
+      <ul id="nav-mobile" class="side-nav">                                                                             
+        <li><a href="/CodeHound/php/upload_page.php">Upload</a></li>                                                    
+      </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
@@ -29,30 +35,17 @@ require 'db_config.php'; // Start session and assign DB config
   <div class="container" id="repos">
     <div class="section">
       <h5 class="center teal-text">Loading Organizations...</h5>
-      <div class="row">
-        <div class="toast">
-          <span>Repository Name 1</span>
-          <div class="switch">
-            <label class="white-text">
-              Off
-              <input type="checkbox">
-              <span class="lever"></span>
-              Active Monitoring
-            </label>
-          </div>
-          <button class="btn waves-effect waves-light">Full Review
-            <i class="material-icons right">send</i>
-          </button>
-        </div>
-      </div>
+      <div class="row">                                                                                                 
+        <div class="toast"></div>                                                                                                          
+      </div>                                                                                                            
       <div class="card-panel teal">                                                                                     
         <div class="card teal">                                                                                         
-          <div class="card-content center">                                                                                
-            <span class="white-text card-title">
-              Please be patient while we query for your organizations and repositories...
-            </span>
-          </div>                                                                                                           
-        </div>                                                                                                             
+          <div class="card-content center">                                                                             
+            <span class="white-text card-title">                                                                        
+              Please be patient while we query for your organizations and repositories...                               
+            </span>                                                                                                     
+          </div>                                                                                                        
+        </div>                                                                                                          
       </div>
     </div>
   </div>

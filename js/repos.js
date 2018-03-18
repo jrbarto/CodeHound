@@ -35,18 +35,24 @@ orgsRequest.onreadystatechange = function() {
             var repo = repos[i];
             var row = document.createElement("div");
             row.setAttribute("class", "row");
-            orgHeader.appendChild(row);
+            reposSection.appendChild(row);
             var toast = document.createElement("div");
             toast.setAttribute("class", "toast");
             row.appendChild(toast);
+            var contLeft = document.createElement("div");
+            contLeft.setAttribute("class", "container left");
+            toast.appendChild(contLeft);
             var span = document.createElement("span");
             span.innerHTML = repo.name;
-            toast.appendChild(span);
+            contLeft.appendChild(span);
 
             /* Create active monitoring switch for pull requests */
+            var contCenter = document.createElement("div");
+            contCenter.setAttribute("class", "container center");
+            toast.appendChild(contCenter);
             var swtch = document.createElement("div");
             swtch.setAttribute("class", "switch");
-            toast.appendChild(swtch);
+            contCenter.appendChild(swtch);
             var label = document.createElement("label");
             label.setAttribute("class", "white-text");
             swtch.appendChild(label);
@@ -70,10 +76,13 @@ orgsRequest.onreadystatechange = function() {
             isHookInstalled(repo.hooks_url, checkbox);
 
             /* Create button to launch a full repo review */
+            var contRight = document.createElement("div");
+            contRight.setAttribute("class", "container right");
+            toast.appendChild(contRight);
             var button = document.createElement("button");
-            button.setAttribute("class", "btn waves-effect waves-light");
+            button.setAttribute("class", "btn waves-effect waves-light right");
             button.innerHTML = "Full Review";
-            toast.appendChild(button);
+            contRight.appendChild(button);
             var icon = document.createElement("i");
             icon.setAttribute("class", "material-icons right");
             icon.innerHTML = "send";
