@@ -1,10 +1,7 @@
 var json = document.currentScript.getAttribute("scripts");
-console.log(json);
 var jsonObject = JSON.parse(json);
 var scripts = jsonObject.scripts;
-console.log(document.location.href);
 var container = document.getElementById("scripts");
-console.log(container);
 var section = document.createElement("div");
 section.setAttribute("class", "section");
 
@@ -30,8 +27,12 @@ for (i = 0; i < scripts.length; i++) {
   activeContainer.setAttribute("class", "container right");
   toast.appendChild(activeContainer);
   var checkbox = document.createElement("input");
+  checkbox.setAttribute("type", "checkbox");
   checkbox.setAttribute("class", "filled-in")
   checkbox.setAttribute("id",  "check" + i);
+
+  checkbox.checked = active;
+
   activeContainer.appendChild(checkbox);
   var label = document.createElement("label");
   label.setAttribute("for", "check" + i);
@@ -60,29 +61,26 @@ function checkUncheck(checkbox, active, row, scriptId) {
   var cardTitle = document.createElement("span");                                                                       
   cardTitle.setAttribute("class", "white-text card-title");                                                             
 
-  console.log("ACTIVE IS " + active);
   if (active) {
     var cardText = "Deactivating groovy script...";
     cardTitle.innerHTML = cardText;
     cardContent.appendChild(cardTitle);
-    checkbox.checked = "false";
-    checkbox.active = 0;
   }
   else {
     var cardText = "Activating groovy script...";
     cardTitle.innerHTML = cardText;                                                                                     
     cardContent.appendChild(cardTitle);                                                                                 
-    checkbox.checked = "true";
-    checkbox.active = 1;
   }
+  
+  var php_active = active ? 1 : 0;
 
   $.ajax({
     url: "/CodeHound/php/deactivate.php",
     type: "POST",
     dataType: "json",
     data: {
-      scriptId: this.scriptId,
-      active: this.active
+      scriptId: scriptId,
+      active: php_active
     }
   });  
 }

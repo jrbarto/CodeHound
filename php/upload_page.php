@@ -10,7 +10,7 @@ $sql = "SELECT * FROM ch_scripts WHERE user_id=$user_id";
 $result = $mysqli->query($sql) or die($mysqli->error);                                                                  
                                                                                                                         
 while ($row = $result->fetch_assoc()) {                                                                                 
-  $active = $row['active'];                                                                                             
+  $active = ($row['active'] == '1');                                                                                            
   $script_path = $row['script_path'];                                                                                 
   $script_id = $row['id'];
   $script = new stdClass();
@@ -21,7 +21,6 @@ while ($row = $result->fetch_assoc()) {
 }
 
 $json_string = json_encode($json);
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -93,6 +92,7 @@ $json_string = json_encode($json);
     <!--  Scripts-->                                                                               
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>                                                   
     <script src="/CodeHound/js/materialize.js"></script>                                                                             
+    <!-- Executed after php code completes so json string is set -->
     <?php echo '<script src="/CodeHound/js/scripts.js" scripts='.$json_string.'></script>'?>
   </body>
 </html>
