@@ -7,15 +7,13 @@ $json->scripts = array();
 
 $user_id = $_SESSION['id']; // id of the account                                                                        
 $sql = "SELECT * FROM ch_scripts WHERE user_id=$user_id";                                                               
-$result = $mysqli->query($sql) or die($mysqli->error);                                                                  
+$result = $mysqli->query($sql) or die($mysqli->error); 
                                                                                                                         
 while ($row = $result->fetch_assoc()) {                                                                                 
   $active = ($row['active'] == '1');                                                                                            
   $script_path = $row['script_path'];                                                                                 
   $script_id = $row['id'];
-  $script = new stdClass();
-  $script->path=$script_path;
-  $script->active=$active;
+  $script = new stdClass(); $script->path=$script_path; $script->active=$active;
   $script->id=$script_id;
   array_push($json->scripts, $script);
 }
@@ -43,14 +41,7 @@ $json_string = json_encode($json);
     <div class="collection teal darken-4 center"> 
       <h3 class="header teal-text">Upload a groovy script</h3> 
       <h5 class="white-text">
-        <?php 
-        if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
-          echo $_SESSION['message'];
-        }
-        else {
-          echo "Your script will be used in future automated code reviews.";
-        }
-        ?>
+        Your script will be used in future automated code reviews.
       </h5>
       <br><br> 
 

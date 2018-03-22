@@ -7,6 +7,7 @@ section.setAttribute("class", "section");
 
 for (i = 0; i < scripts.length; i++) {
   var script = scripts[i];
+  /* Remove everything but the filename */
   var path = script.path.replace(/^.*[\\\/]/, '');
   var active = script.active;
   var scriptId = script.id;
@@ -42,13 +43,13 @@ for (i = 0; i < scripts.length; i++) {
   checkbox.row = row;
   checkbox.scriptId = scriptId;
   checkbox.addEventListener("click", function(e) {
-    checkUncheck(this, this.active, this.row, this.scriptId);
+    checkUncheck(this.active, this.row, this.scriptId);
   });
 }
 
 container.appendChild(section);
 
-function checkUncheck(checkbox, active, row, scriptId) {
+function checkUncheck(active, row, scriptId) {
   var cardPanel = document.createElement("div");
   cardPanel.setAttribute("class", "card-panel teal");
   row.insertAdjacentElement("afterend", cardPanel);
@@ -72,15 +73,17 @@ function checkUncheck(checkbox, active, row, scriptId) {
     cardContent.appendChild(cardTitle);                                                                                 
   }
   
-  var php_active = active ? 1 : 0;
-
   $.ajax({
-    url: "/CodeHound/php/deactivate.php",
+    url: "/CodeHound/php/toggle_script.php",
     type: "POST",
-    dataType: "json",
     data: {
       scriptId: scriptId,
-      active: php_active
+      active: active
+    },
+    success: function(data) {
+      cardPanel.remove();
+      active = !active;
     }
   });  
+
 }

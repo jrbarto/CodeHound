@@ -1,6 +1,6 @@
 <?php
 require 'db_config.php';
-$target_dir = "/var/www/html/CodeHound/application/scripts/";
+$target_dir = "/var/www/html/CodeHound/application/scripts/" . $_SESSION['email'] . "/";
 $target_file = $target_dir . basename($_FILES["groovy_file"]["name"]);
 $comment = $_POST['comment'];
 $valid = 1;
@@ -13,6 +13,10 @@ if ($file_type != "groovy") {
 if (file_exists($target_file)) {
   $_SESSION['error'] = "This groovy file already exists.";
   $valid = 0;
+}
+
+if (!is_dir($target_dir)) {
+  mkdir($target_dir);
 }
 
 if ($valid ==0) {
@@ -36,7 +40,7 @@ else {
   else {
     $_SESSION['error'] = "File upload has failed.";
     console_log(error_get_last());
-    header("location: /CodeHound/php/error_page.php");
+    //header("location: /CodeHound/php/error_page.php");
   }
 }
 ?>
