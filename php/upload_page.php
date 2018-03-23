@@ -27,6 +27,7 @@ $json_string = json_encode($json);
     <title>CodeHound Upload</title>
     <!-- CSS  --> 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
     <link href="/CodeHound/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/> 
     <link href="/CodeHound/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/> 
   </head>
@@ -83,6 +84,7 @@ $json_string = json_encode($json);
     <!--  Scripts-->                                                                               
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>                                                   
     <script src="/CodeHound/js/materialize.js"></script>                                                                             
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
     <!-- Executed after php code completes so json string is set -->
     <?php echo '<script src="/CodeHound/js/scripts.js" scripts='.$json_string.'></script>'?>
   </body>
