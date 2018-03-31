@@ -4,6 +4,12 @@ require 'db_config.php';
 
 $repo_path = $_GET['repo_path'];
 $repo_url = $_GET['repo_url'];
+
+$json_data['groovyExe'] = $groovy_path;                                                                                
+$json_data['repoPath'] = $repo_path;                                                                                    
+$json_data['fullReview'] = true;                                                                                        
+$json_data['authHeader'] = $_SESSION['github_auth'];
+
 $user_id = $_SESSION['id']; // id of the account
 $sql = "SELECT * FROM ch_scripts WHERE user_id=$user_id";
 $result = $mysqli->query($sql) or die($mysqli->error);
@@ -13,8 +19,15 @@ while ($row = $result->fetch_assoc()) {
   if ($active) {
     $script_path = $row['script_path'];
     $comment = $row['comment'];
-    $command = "java -jar " . $ch_jar ." ". $script_path ." ". $repo_path 
-      ." ". $_SESSION['github_auth'] ." ". "'$comment'" ." true";
+    $json_data['groovyScript'] = $script_path;
+    $json_data['comment'] = $comment;
+
+    $json_file = tmpfile(); // Returns a file handler for a temporary file                                                  
+    $meta_data = stream_get_meta_data($json_file);                                                                          
+    $file_path = $meta_data['uri'];
+    fwrite($json_file, json_encode($json_data));
+
+    $command = "java -jar " . $ch_jar ." ". $file_path;
     $output .= shell_exec($command);
   }
 }

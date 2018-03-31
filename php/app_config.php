@@ -1,5 +1,6 @@
 <?php
 /* Code Hound application config */
+$groovy_path = "/usr/bin/groovy";
 $app_version = "1.0";
 $app_dir = "/var/www/html/CodeHound/application";
 $ch_jar = $app_dir . "/CodeSniffer-" . $app_version . ".jar";
