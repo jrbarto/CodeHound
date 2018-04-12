@@ -6,16 +6,19 @@ $json = file_get_contents("php://input");
 $_POST = json_decode($json, true);
 $repository = $_POST['repository'];
 $repo_path = $repository['full_name'];
+$org = $_POST['organization'];
+$org_name = $org['login'];
 $sender = $_POST['sender'];
 $github_user = $sender['login'];
-//$sql = "SELECT * FROM ch_users WHERE github_user='$github_user'";
-$result = $mysqli->query("SELECT * FROM ch_users WHERE github_user='codehounduser'") or die($mysqli->error);
+$sql = "SELECT * FROM ch_users WHERE orgs LIKE '%$org_name%'";
+//$result = $mysqli->query("SELECT * FROM ch_users WHERE github_user='codehounduser'") or die($mysqli->error);
+$result = $mysqli->query($sql) or die($mysqli->error);
+
 if ($result->num_rows == 0) {
   echo $github_user . " does not exist in the database.";
   exit(1);
 }
 $account = $result->fetch_assoc();
-$user_id = $account['user_id'];
 $github_auth = $account['github_auth'];
 $user_id = $account['id'];
 echo "USER ID IS " .$user_id;

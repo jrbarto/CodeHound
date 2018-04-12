@@ -15,7 +15,7 @@ orgsRequest.onreadystatechange = function() {
   if (orgsRequest.readyState == XMLHttpRequest.DONE) {
     var response = orgsRequest.response;
     var orgs = JSON.parse(response);
-
+    var orgArr = [];
     
     if (orgs.length == 0) {
       var row = document.createElement("div");
@@ -32,6 +32,7 @@ orgsRequest.onreadystatechange = function() {
       var orgHeader = document.createElement("h5");
       orgHeader.setAttribute("class", "center teal-text");
       orgHeader.innerHTML = org.login + " Repositories:";
+      orgArr.push(org.login);
       reposSection.appendChild(orgHeader);
       
       var repoRequest = new XMLHttpRequest();
@@ -113,6 +114,15 @@ orgsRequest.onreadystatechange = function() {
 
     reposContainer.innerHTML = "";
     reposContainer.appendChild(reposSection);
+
+    /* Update user's list of orgs in the DB */
+    $.ajax({                                                                                                            
+      url: "/CodeHound/php/insert_repos.php",                                                                                 
+      type: "POST",                                                                                                     
+      data: {                                                                                                           
+        orgs: orgArr.toString(),                                                                                                       
+      }                                                                                                                 
+    });
   }
 }
 
