@@ -26,91 +26,20 @@ orgsRequest.onreadystatechange = function() {
       reposSection.appendChild(header);
     }
     
+    var repoRequests = new Array();
+
+    console.log("NUMBER OF ORGS IS " + orgs.length);
+
     for (i = 0; i < orgs.length; i++) {
       var org = orgs[i];
       
-      var orgHeader = document.createElement("h5");
-      orgHeader.setAttribute("class", "center teal-text");
-      orgHeader.innerHTML = org.login + " Repositories:";
       orgArr.push(org.login);
-      reposSection.appendChild(orgHeader);
-      
       var repoRequest = new XMLHttpRequest();
-      
-      repoRequest.onreadystatechange = function() {
-        if (repoRequest.readyState == XMLHttpRequest.DONE) {
-          var repoResponse = repoRequest.response;
-          var repos = JSON.parse(repoResponse);
-
-          for (i = 0; i < repos.length; i++) {
-            var repo = repos[i];
-            var row = document.createElement("div");
-            row.setAttribute("class", "row");
-            reposSection.appendChild(row);
-            var toast = document.createElement("div");
-            toast.setAttribute("class", "toast");
-            row.appendChild(toast);
-            var contLeft = document.createElement("div");
-            contLeft.setAttribute("class", "container left");
-            toast.appendChild(contLeft);
-            var span = document.createElement("span");
-            span.innerHTML = repo.name;
-            contLeft.appendChild(span);
-
-            /* Create active monitoring switch for pull requests */
-            var contCenter = document.createElement("div");
-            contCenter.setAttribute("class", "container center");
-            toast.appendChild(contCenter);
-            var swtch = document.createElement("div");
-            swtch.setAttribute("class", "switch");
-            contCenter.appendChild(swtch);
-            var label = document.createElement("label");
-            label.setAttribute("class", "white-text");
-            swtch.appendChild(label);
-            var offLabel = document.createTextNode("Off");
-            var onLabel = document.createTextNode("Active Monitoring");
-            label.appendChild(offLabel);
-            var checkbox = document.createElement("input");
-            checkbox.setAttribute("type", "checkbox");
-            label.appendChild(checkbox);
-            /* Store variables for use on checkbox button event */
-            checkbox.hooksUrl = repo.hooks_url;
-            checkbox.row = row;
-            checkbox.addEventListener("click", function(e) {
-              installWebhook(this.hooksUrl, this, this.row);
-            });
-
-            var lever = document.createElement("span");
-            lever.setAttribute("class", "lever");
-            label.appendChild(lever);
-            label.appendChild(onLabel);
-            isHookInstalled(repo.hooks_url, checkbox);
-
-            /* Create button to launch a full repo review */
-            var contRight = document.createElement("div");
-            contRight.setAttribute("class", "container right");
-            toast.appendChild(contRight);
-            var button = document.createElement("button");
-            button.setAttribute("class", "btn waves-effect waves-light right");
-            button.innerHTML = "Full Review";
-            contRight.appendChild(button);
-            var icon = document.createElement("i");
-            icon.setAttribute("class", "material-icons right");
-            icon.innerHTML = "send";
-            button.appendChild(icon);
-            /* Store variables for use on button event */
-            button.repoPath = repo.full_name;
-            button.repoUrl = repo.html_url;
-            button.row = row;
-            button.addEventListener("click", function(e) {
-              runFullReview(this.repoPath, this.repoUrl, this.row);
-            });
-          }
-        }
-      }
-
-      httpGet(org.repos_url, repoRequest);
+      var requestObj = {"org":org, "request": repoRequest};
+      repoRequests.push(requestObj);
     }
+
+    requestRepos(repoRequests, reposSection);
 
     reposContainer.innerHTML = "";
     reposContainer.appendChild(reposSection);
@@ -127,6 +56,104 @@ orgsRequest.onreadystatechange = function() {
 }
 
 httpGet(GH_API + "/user/orgs", orgsRequest);
+
+function requestRepos(repoRequests, reposSection) {
+  console.log("REPO REQUESTS LENGTH IS " + repoRequests.length);
+  console.log("GOT ONE REPO REQUEST");
+  var requestObj = repoRequests[0];
+  var repoRequest = requestObj.request;
+  var org = requestObj.org;
+
+  repoRequest.onreadystatechange = function() {
+    if (repoRequest.readyState == XMLHttpRequest.DONE) {
+      console.log("RECEIVED REPOS FOR ORG: " + org.login);
+
+      var orgHeader = document.createElement("h5");
+      orgHeader.setAttribute("class", "center teal-text");
+      orgHeader.innerHTML = org.login + " Repositories:";
+      reposSection.appendChild(orgHeader);
+
+      var repoResponse = repoRequest.response;
+      var repos = JSON.parse(repoResponse);
+
+      for (j = 0; j < repos.length; j++) {
+        var repo = repos[j];
+        var row = document.createElement("div");
+        row.setAttribute("class", "row");
+        reposSection.appendChild(row);
+        var toast = document.createElement("div");
+        toast.setAttribute("class", "toast");
+        row.appendChild(toast);
+        var contLeft = document.createElement("div");
+        contLeft.setAttribute("class", "container left");
+        toast.appendChild(contLeft);
+        var span = document.createElement("span");
+        span.innerHTML = repo.name;
+        contLeft.appendChild(span);
+
+        /* Create active monitoring switch for pull requests */
+        var contCenter = document.createElement("div");
+        contCenter.setAttribute("class", "container center");
+        toast.appendChild(contCenter);
+        var swtch = document.createElement("div");
+        swtch.setAttribute("class", "switch");
+        contCenter.appendChild(swtch);
+        var label = document.createElement("label");
+        label.setAttribute("class", "white-text");
+        swtch.appendChild(label);
+        var offLabel = document.createTextNode("Off");
+        var onLabel = document.createTextNode("Active Monitoring");
+        label.appendChild(offLabel);
+        var checkbox = document.createElement("input");
+        checkbox.setAttribute("type", "checkbox");
+        label.appendChild(checkbox);
+        /* Store variables for use on checkbox button event */
+        checkbox.hooksUrl = repo.hooks_url;
+        checkbox.row = row;
+        checkbox.addEventListener("click", function(e) {
+          installWebhook(this.hooksUrl, this, this.row);
+        });
+
+        var lever = document.createElement("span");
+        lever.setAttribute("class", "lever");
+        label.appendChild(lever);
+        label.appendChild(onLabel);
+        isHookInstalled(repo.hooks_url, checkbox);
+
+        /* Create button to launch a full repo review */
+        var contRight = document.createElement("div");
+        contRight.setAttribute("class", "container right");
+        toast.appendChild(contRight);
+        var button = document.createElement("button");
+        button.setAttribute("class", "btn waves-effect waves-light right");
+        button.innerHTML = "Full Review";
+        contRight.appendChild(button);
+        var icon = document.createElement("i");
+        icon.setAttribute("class", "material-icons right");
+        icon.innerHTML = "send";
+        button.appendChild(icon);
+        /* Store variables for use on button event */
+        button.repoPath = repo.full_name;
+        button.repoUrl = repo.html_url;
+        button.row = row;
+        button.addEventListener("click", function(e) {
+          runFullReview(this.repoPath, this.repoUrl, this.row);
+        });
+      }
+      
+
+      var emptyLine = document.createElement("br");
+      reposSection.appendChild(emptyLine);
+
+      repoRequests.shift();
+      if (repoRequests.length > 0) {
+        requestRepos(repoRequests, reposSection);
+      }
+    }
+  }
+
+  httpGet(org.repos_url, repoRequest);
+}
 
 function httpGet(url, request) {
   request.open("GET", url);
