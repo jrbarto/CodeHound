@@ -32,24 +32,26 @@ require 'db_config.php'; // Start session and assign DB config
     </div>
   </nav>
 
-  <div class="container" id="repos">
-    <div class="section">
-      <h5 class="center teal-text">Loading Organizations...</h5>
-      <div class="row">                                                                                                 
-        <div class="toast"></div>                                                                                                          
-      </div>                                                                                                            
-      <div class="card-panel teal">                                                                                     
-        <div class="card teal">                                                                                         
-          <div class="card-content center">                                                                             
-            <span class="white-text card-title">                                                                        
-              Please be patient while we query for your organizations and repositories...                               
-            </span>                                                                                                     
-          </div>                                                                                                        
-        </div>                                                                                                          
+  <main>
+    <div class="container" id="repos">
+      <div class="section">
+        <h5 class="center teal-text">Loading Organizations...</h5>
+        <div class="row">                                                                                                 
+          <div class="toast"></div>                                                                                                          
+        </div>                                                                                                            
+        <div class="card-panel teal">                                                                                     
+          <div class="card teal">                                                                                         
+            <div class="card-content center">                                                                             
+              <span class="white-text card-title">                                                                        
+                Please be patient while we query for your organizations and repositories...                               
+              </span>                                                                                                     
+            </div>                                                                                                        
+          </div>                                                                                                          
+        </div>
       </div>
     </div>
-  </div>
-  <br><br>
+    <br><br>
+  </main>
 
   <footer class="page-footer teal">
     <div class="container">                                                                                             
