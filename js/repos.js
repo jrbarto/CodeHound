@@ -28,8 +28,6 @@ orgsRequest.onreadystatechange = function() {
     
     var repoRequests = new Array();
 
-    console.log("NUMBER OF ORGS IS " + orgs.length);
-
     for (i = 0; i < orgs.length; i++) {
       var org = orgs[i];
       
@@ -66,8 +64,6 @@ function requestRepos(repoRequests, reposSection) {
 
   repoRequest.onreadystatechange = function() {
     if (repoRequest.readyState == XMLHttpRequest.DONE) {
-      console.log("RECEIVED REPOS FOR ORG: " + org.login);
-
       var orgHeader = document.createElement("h5");
       orgHeader.setAttribute("class", "center teal-text");
       orgHeader.innerHTML = org.login + " Repositories:";

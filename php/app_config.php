@@ -10,6 +10,9 @@ $default_scripts =
   more than 3 arguments."),
   array($app_dir . "/scripts/LongMethodSniffer.groovy", 
   "This method is too long. Methods that are too long should be split into 
-  separate functions.")
+  separate functions."),
+  array($app_dir . "/scripts/LargeClassSniffer.groovy", 
+  "This class is too large. Overly large classes should be divided into
+  separate classes or child classes.")
   );
 ?>
