@@ -6,7 +6,6 @@ require 'db_config.php'; // Start session and assign DB config
 // Escape email to protect against SQL injections
 $user_id = $_SESSION['id'];
 $orgs = $_POST['orgs'];
-$mysqli->query("UPDATE ch_users SET orgs='$orgs' WHERE id=$user_id") or die($mysqli->error);
 
 /* Split orgs into array. GitHub doesn't allow commas in org names, so this is okay */
 $org_arr = explode(',', $orgs);
@@ -32,6 +31,7 @@ if ($result->num_rows == 0) {
 }
 
 foreach ($org_arr as $org_name) {
+  echo "INERTING ORG " . $org_name;
   $sql = "INSERT IGNORE INTO ch_orgs (org_name, user_id)
           VALUES('$org_name', $user_id)";                                                                   
 
